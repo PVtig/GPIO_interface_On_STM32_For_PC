@@ -16,7 +16,9 @@ Comparison with Similar Projects
 This project combines the flexibility of Bus Pirate, the simplicity of Arduino Firmata, and the performance of STM32, 
 offering more pins and protocols than most alternatives while keeping resource usage minimal.
 
+
 Requirements
+
 Hardware
 - STM32F103C8T6 (Blue Pill) board.
 - ST-Link V2 programmer for flashing.
@@ -25,3 +27,46 @@ Software
 - Arduino IDE with STM32 support (STM32duino).
 - ST-Link Utility or STM32CubeProgrammer for flashing.
 - Terminal (e.g., PuTTY) or Python with the pyserial library for control.
+
+
+Installation
+1. Set Up Arduino IDE:
+- Install Arduino IDE.
+- In File → Preferences, add this URL to "Additional Boards Manager URLs":
+https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+- In Tools → Board → Boards Manager, install "STM32 MCU based boards".
+
+2. Compile the Code:
+- Open the bluepill_gpio_interface.ino file in Arduino IDE.
+- Select the board: Tools → Board → Generic STM32F103C series.
+- Export the binary: Sketch → Export compiled Binary.
+
+3. Flash via ST-Link:
+- Connect ST-Link V2 to Blue Pill (SWDIO → PA13, SWCLK → PA14, GND, 3.3V).
+- Open the .bin file in ST-Link Utility and click Target → Program.
+
+4. Connect to PC:
+- Plug Blue Pill into your computer via USB.
+- Identify the COM port in Device Manager (Windows) or /dev/ttyACMx (Linux).
+
+Usage
+Once connected to the PC via USB, you can send commands through a terminal (e.g., Arduino Serial Monitor) or a Python script.
+
+Command Format
+GPIO:
+- MODE <pin> <IN/OUT/PWM/ANALOG> — Set pin mode.
+- SET <pin> <value> — Set value (0-255).
+- READ <pin> — Read value (0-1 for IN, 0-4095 for ANALOG).
+UART:
+- UART <port> <baud> WRITE <data> — Send data via UART (port: 1-3).
+I2C:
+- I2C <port> SCAN — Scan for devices (port: 1-2).
+- I2C <port> WRITE <addr> <data> — Write data (addr in HEX).
+- I2C <port> READ <addr> <bytes> — Read data.
+SPI:
+- SPI <port> WRITE <data> — Send data (port: 1-2).
+Example Commands
+1. Turn on an LED on PA0:
+MODE PA0 OUT
+SET PA0 1
+2. 
