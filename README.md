@@ -1,4 +1,5 @@
 Blue Pill GPIO Interface
+
 This project transforms the STM32F103C8T6 (Blue Pill) microcontroller into a versatile GPIO interface controlled from a computer via USB. 
 It allows you to manage all available pins and hardware protocols (GPIO, PWM, ADC, UART, I2C, SPI) using simple text commands sent over USB Serial. 
 All logic resides on the computer, with the Blue Pill acting as a command executor, making it perfect for interfacing with Arduino modules and similar devices.
