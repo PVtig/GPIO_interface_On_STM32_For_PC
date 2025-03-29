@@ -49,6 +49,7 @@ https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectron
 - Plug Blue Pill into your computer via USB.
 - Identify the COM port in Device Manager (Windows) or /dev/ttyACMx (Linux).
 
+
 Usage
 Once connected to the PC via USB, you can send commands through a terminal (e.g., Arduino Serial Monitor) or a Python script.
 
@@ -65,8 +66,74 @@ I2C:
 - I2C <port> READ <addr> <bytes> — Read data.
 SPI:
 - SPI <port> WRITE <data> — Send data (port: 1-2).
+
+
 Example Commands
+
 1. Turn on an LED on PA0:
 MODE PA0 OUT
 SET PA0 1
-2. 
+
+2. Read an analog sensor on PA1:
+MODE PA1 ANALOG
+READ PA1
+
+3. Send data via UART1:
+UART 1 9600 WRITE Hello
+
+4. Scan I2C1 bus:
+I2C 1 SCAN
+
+5. Send data via SPI1:
+SPI 1 WRITE 0xAA
+
+
+Python Example
+
+import serial
+import time
+
+ser = serial.Serial('COM3', 115200, timeout=1)  # Replace COM3 with your port
+
+def send_command(cmd):
+    ser.write(f"{cmd}\n".encode())
+    time.sleep(0.1)
+    return ser.readline().decode().strip()
+
+print(send_command("MODE PA0 OUT"))
+print(send_command("SET PA0 1"))
+print(send_command("READ PA1"))
+
+ser.close()
+
+
+Pin Mapping
+- GPIO: All pins except PA11/PA12 (USB).
+- PWM: PA0-PA3, PA6-PA10, PB0-PB1, PB6-PB9, etc.
+- ADC: PA0-PA7, PB0-PB1.
+- UART:
+  1: PA9 (TX), PA10 (RX).
+  2: PA2 (TX), PA3 (RX).
+  3: PB10 (TX), PB11 (RX).
+- I2C:
+  1: PB6 (SCL), PB7 (SDA).
+  2: PB10 (SCL), PB11 (SDA).
+- SPI:
+  1: PA5 (SCK), PA6 (MISO), PA7 (MOSI).
+  2: PB13 (SCK), PB14 (MISO), PB15 (MOSI).
+
+Limitations
+- Pins used by an active protocol (e.g., UART1) cannot be reused for other functions simultaneously.
+- Limited memory (64 KB Flash, 20 KB RAM).
+
+Potential Improvements
+- Add commands to disable interfaces (e.g., STOP UART 1).
+- Implement buffering for UART/I2C/SPI data.
+- Develop a Python library for streamlined control.
+
+License
+This project is licensed under the MIT License. Feel free to use and modify it!
+
+
+
+
